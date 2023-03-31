@@ -13,6 +13,9 @@ public class JsscSerialInputStream extends InputStream {
         this.serialPort = serialPort;
     }
 
+    /**
+     * 读取下一个字节的数据，如果没有则返回 -1
+     */
     @Override
     public int read() throws IOException {
         try {
@@ -27,6 +30,19 @@ public class JsscSerialInputStream extends InputStream {
         }
     }
 
+    @Override
+    public int read(byte[] b) throws IOException {
+        return read(b, 0, b.length);
+    }
+
+    /**
+     * 从第 off 位置读取【最多(实际可能小于)】 len 长度字节的数据放到 byte 数组中，流是以 -1 来判断是否读取结束的; 此方法会一直阻止，
+     * 直到输入数据可用、检测到stream结尾或引发异常为止
+     * @param b     the buffer into which the data is read.
+     * @param off   the start offset in array {@code b}
+     *                   at which the data is written.
+     * @param len   the maximum number of bytes to read.
+     */
     @Override
     public int read(byte[] b, int off, int len) throws IOException {
         if (b == null) {
@@ -55,6 +71,9 @@ public class JsscSerialInputStream extends InputStream {
         }
     }
 
+    /**
+     * 返回可读的字节数量
+     */
     @Override
     public int available() throws IOException {
         try {

@@ -13,6 +13,9 @@ public class JsscSerialOutputStream extends OutputStream {
         this.serialPort = serialPort;
     }
 
+    /**
+     * 写入一个字节，可以看到这里的参数是一个 int 类型，对应之前的读方法，int 类型的 32 位，只有低 8 位才写入，高 24 位将舍弃
+     */
     @Override
     public void write(int b) throws IOException {
         try {
@@ -22,6 +25,17 @@ public class JsscSerialOutputStream extends OutputStream {
         }
     }
 
+    @Override
+    public void write(byte[] b) throws IOException {
+        write(b, 0, b.length);
+
+    }
+    /**
+     * 将 byte 数组从 off 位置开始，len 长度的字节写入
+     * @param b     the data.
+     * @param off   the start offset in the data.
+     * @param len   the number of bytes to write.
+     */
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
         if (b == null) {

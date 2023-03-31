@@ -8,8 +8,12 @@ import com.serotonin.modbus4j.msg.ReadDiscreteInputsRequest;
 import com.serotonin.modbus4j.msg.ReadDiscreteInputsResponse;
 import com.serotonin.modbus4j.serial.SerialPortWrapper;
 
+import java.util.logging.Logger;
+
 public class ModbusRTUExample
 {
+
+    private static final Logger logger = Logger.getLogger(ModbusRTUExample.class.getName());
     public static void main( String[] args )
     {
         ModbusFactory modbusFactory = new ModbusFactory();
@@ -27,15 +31,15 @@ public class ModbusRTUExample
         ModbusMaster modbusMaster = modbusFactory.createRtuMaster(serialPortWrapper);
 
         // Set the timeout for the Modbus RTU master
-        modbusMaster.setTimeout(5000); // Set the timeout to 1000 ms
-        modbusMaster.setRetries(0); // Set the number of retries to 1
+        modbusMaster.setTimeout(5000); // Set the timeout to 5000 ms
+        modbusMaster.setRetries(0); // Set the number of retries to 0
 
         // Initialize the Modbus RTU master
         try {
             modbusMaster.init();
-            System.out.println("Modbus RTU master initialized successfully");
+            logger.info("Modbus RTU master initialized successfully");
         } catch (ModbusInitException e) {
-            System.err.println("Error initializing Modbus RTU master: " + e.getMessage());
+            logger.warning("Error initializing Modbus RTU master: " + e.getMessage());
         }
 
         try {
@@ -43,8 +47,7 @@ public class ModbusRTUExample
             ReadDiscreteInputsResponse response = (ReadDiscreteInputsResponse) modbusMaster.send(request);
             System.out.println(byteArrayToInt(response.getData()));
         } catch (ModbusTransportException e) {
-            System.err.println("Error while reading discrete inputs: " + e.getMessage());
-            e.printStackTrace();
+            logger.warning("Error while reading discrete inputs: " + e.getMessage());
         }
 
         modbusMaster.destroy();
